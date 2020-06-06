@@ -46,7 +46,7 @@ public class CreatePage extends AppCompatActivity {
             flag = true;
         }
 
-
+        //戻る
         findViewById(R.id.return_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

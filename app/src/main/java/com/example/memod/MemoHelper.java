@@ -9,7 +9,7 @@ public class MemoHelper extends SQLiteOpenHelper {
     static final private String DBName = "Memo_DB";
     static final private int VERSION = 1;
 
-    public MemoHelper(Context context){
+    MemoHelper(Context context){
         super(context, DBName, null, VERSION);
     }
 
@@ -19,7 +19,7 @@ public class MemoHelper extends SQLiteOpenHelper {
                 "uuid TEXT, " +
                 "body TEXT)");
     }
-//aaa
+//aaaaaaaa
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE IF EXISTS MEMO_TABLE");
         onCreate(db);
