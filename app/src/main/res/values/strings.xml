@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">memoD</string>
+
+    <item name="new_memo" type="id" />
+    <item name="return_button" type="id" />
+    <item name="save_button" type="id" />
+    <item name="return_button2" type="id" />
+    <item name="save_button2" type="id" />
+    <item name="delete_button2" type="id" />
+    <item name="text_body" type="id" />
+    <item name="List" type="id" />
+    <item name="text1" type="id" />
+    <item name="text2" type="id" />
+
+</resources>

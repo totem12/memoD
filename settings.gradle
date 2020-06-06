@@ -1,0 +1,2 @@
+rootProject.name='memoD'
+include ':app'
