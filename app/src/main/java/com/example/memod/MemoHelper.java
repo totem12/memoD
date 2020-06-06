@@ -19,7 +19,7 @@ public class MemoHelper extends SQLiteOpenHelper {
                 "uuid TEXT, " +
                 "body TEXT)");
     }
-//aaaaaaaa
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE IF EXISTS MEMO_TABLE");
         onCreate(db);

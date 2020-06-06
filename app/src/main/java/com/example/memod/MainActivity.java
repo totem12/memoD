@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.new_memo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                id = UUID.randomUUID().toString();
 
+                id = UUID.randomUUID().toString();
                 Intent intent = new Intent(MainActivity.this, CreatePage.class);
                 intent.putExtra("id", id);
 
@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 List.remove(position);
                 simpleAdapter.notifyDataSetChanged();
                 Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
-
 
                 return true;
             }

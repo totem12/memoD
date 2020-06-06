@@ -23,10 +23,8 @@ public class CreatePage extends AppCompatActivity {
         setContentView(R.layout.activity_create_page);
 
         helper = new MemoHelper(CreatePage.this);
-
         Intent intent = this.getIntent();
         id = intent.getStringExtra("id");
-
 
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
@@ -74,8 +72,7 @@ public class CreatePage extends AppCompatActivity {
                 } finally{
                     db.close();
                 }
-                Intent intent = new Intent(CreatePage.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
