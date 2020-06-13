@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         helper = new MemoHelper(MainActivity.this);
 
-        final ArrayList<HashMap<String, String>> List = new ArrayList<>();
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
             Cursor cs = db.rawQuery("select uuid, body, title from MEMO_TABLE order by id", null);
