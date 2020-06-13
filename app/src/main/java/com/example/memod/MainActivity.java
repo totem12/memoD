@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TwoLineListItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +19,18 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    MemoHelper helper = null;
-    String id;
+    private static final String TAG = "mainActivity";
+    private MemoHelper helper = null;
+    private String id;
+    private MyListAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.i(TAG, "onCreate()");
 
     }
 
@@ -39,35 +41,32 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<HashMap<String, String>> List = new ArrayList<>();
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            Cursor data_set = db.rawQuery("select uuid, body from MEMO_TABLE order by id", null);
-            boolean first = data_set.moveToFirst();
+            Cursor cs = db.rawQuery("select uuid, body, title from MEMO_TABLE order by id", null);
+            final ArrayList<ListItem> data = new ArrayList<>();
+            boolean first = cs.moveToFirst();
             while (first) {
-                HashMap<String, String> data = new HashMap<>();
-                data.put("id", data_set.getString(0));
-                data.put("body", data_set.getString(1));
-                List.add(data);
+                ListItem item = new ListItem();
 
-                first = data_set.moveToNext();
+                item.setUuid(cs.getString(0));
+                item.setBody(cs.getString(1));
+                item.setTitle(cs.getString(2));
+
+                data.add(item);
+
+                first = cs.moveToNext();
             }
-            data_set.close();
+            adapter = new MyListAdapter(this, data,R.layout.list_item);
+            listView = findViewById(R.id.List);
+            listView.setAdapter(adapter);
+            cs.close();
         } finally {
             db.close();
         }
 
-        final SimpleAdapter simpleAdapter = new SimpleAdapter(this,
-                List,
-                android.R.layout.simple_list_item_2,
-                new String[]{"body", "id"},
-                new int[]{android.R.id.text1, android.R.id.text2}
-        );
-
-        final ListView listView = findViewById(R.id.List);
-        listView.setAdapter(simpleAdapter);
-
+        //新規作成
         findViewById(R.id.new_memo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 id = UUID.randomUUID().toString();
                 Intent intent = new Intent(MainActivity.this, CreatePage.class);
                 intent.putExtra("id", id);
@@ -86,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TwoLineListItem two = (TwoLineListItem) view;
-                TextView idTextView = two.getText2();
-                String idStr = (String) idTextView.getText();
+                String idStr = adapter.getId(position);
 
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try {
@@ -96,20 +93,20 @@ public class MainActivity extends AppCompatActivity {
                 } finally {
                     db.close();
                 }
-                List.remove(position);
-                simpleAdapter.notifyDataSetChanged();
+
+                adapter.remove(position);
                 Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 
                 return true;
             }
         });
 
+        //タッチしたメモにとぶ
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TwoLineListItem two = (TwoLineListItem) view;
-                TextView idTextView = two.getText2();
-                String Id = (String) idTextView.getText();
+
+                String Id = adapter.getId(position);
 
                 Intent intent = new Intent(MainActivity.this, CreatePage.class);
                 intent.putExtra("id", Id);

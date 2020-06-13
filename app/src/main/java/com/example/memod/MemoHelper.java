@@ -17,7 +17,8 @@ public class MemoHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE MEMO_TABLE (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "uuid TEXT, " +
-                "body TEXT)");
+                "body TEXT," +
+                "title TEXT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){

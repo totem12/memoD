@@ -15,6 +15,7 @@ public class CreatePage extends AppCompatActivity {
     private MemoHelper helper = null;
     private String id ="";
     private EditText body;
+    private EditText title;
     private boolean flag = false;
 
     @Override
@@ -28,18 +29,24 @@ public class CreatePage extends AppCompatActivity {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            Cursor cs = db.rawQuery("select body from MEMO_TABLE where uuid = '"+ id +"'", null);
+            Cursor cs = db.rawQuery("select body, title from MEMO_TABLE where uuid = '"+ id +"'", null);
             boolean eol = cs.moveToFirst();
             while (eol) {
                 String Body = cs.getString(0);
                 body = findViewById(R.id.text_body);
                 body.setText(Body);
+
+                String Title = cs.getString(1);
+                title = findViewById(R.id.editTitle);
+                title.setText(Title);
+
                 eol = cs.moveToNext();
             }
             cs.close();
         } finally {
             db.close();
         }
+
         if(body.length() == 0){
             flag = true;
         }
@@ -60,18 +67,23 @@ public class CreatePage extends AppCompatActivity {
             }
         });
 
+        //登録
         findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 body = findViewById(R.id.text_body);
                 String data_body = body.getText().toString();
 
+                title = findViewById(R.id.editTitle);
+                String data_title = title.getText().toString();
+
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try{
-                    db.execSQL("update MEMO_TABLE set body = '"+ data_body +"' where uuid = '"+id+"'");
+                    db.execSQL("update MEMO_TABLE set body = '"+ data_body +"', title = '"+ data_title+"' where uuid = '"+id+"'");
                 } finally{
                     db.close();
                 }
+
                 finish();
             }
         });
