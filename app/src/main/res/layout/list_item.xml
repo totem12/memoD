@@ -26,9 +26,21 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/uuid"
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="15sp"/>
 
+    <TextView
+        android:id="@+id/date2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="15sp"/>
+
+
+    <TextView
+        android:id="@+id/date3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="15sp"/>
 </LinearLayout>

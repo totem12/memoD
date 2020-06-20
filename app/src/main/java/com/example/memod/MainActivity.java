@@ -39,24 +39,32 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            Cursor cs = db.rawQuery("select uuid, body, title from MEMO_TABLE order by id", null);
+            Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE order by id", null);
+            Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE", null);
             final ArrayList<ListItem> data = new ArrayList<>();
             boolean first = cs.moveToFirst();
-            while (first) {
+            boolean second = dcs.moveToFirst();
+            while (first && second) {
                 ListItem item = new ListItem();
 
-                item.setUuid(cs.getString(0));
-                item.setBody(cs.getString(1));
-                item.setTitle(cs.getString(2));
+                item.setBody(cs.getString(0));
+                item.setTitle(cs.getString(1));
+                item.setUuid(cs.getString(2));
+
+                item.setDate(dcs.getString(0));
+                item.setDate2(dcs.getString(1));
+                item.setDate3(dcs.getString(2));
 
                 data.add(item);
 
                 first = cs.moveToNext();
+                second = dcs.moveToFirst();
             }
             adapter = new MyListAdapter(this, data,R.layout.list_item);
             listView = findViewById(R.id.List);
             listView.setAdapter(adapter);
             cs.close();
+            dcs.close();
         } finally {
             db.close();
         }
@@ -72,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try{
                     db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
+                    db.execSQL("insert into DATE_TABLE(uuid, date) VALUES('"+ id +"', '"+ "')");
                 }finally {
                     db.close();
                 }
@@ -88,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try {
                     db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
+                    db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
                 } finally {
                     db.close();
                 }

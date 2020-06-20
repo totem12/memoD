@@ -44,7 +44,9 @@ public class MyListAdapter extends BaseAdapter {
         }
         ((TextView) convertView.findViewById(R.id.title)).setText(item.getTitle());
         ((TextView) convertView.findViewById(R.id.body)).setText(item.getBody());
-        ((TextView) convertView.findViewById(R.id.uuid)).setText(item.getUuid());
+        ((TextView) convertView.findViewById(R.id.date)).setText(item.getDate());
+        ((TextView) convertView.findViewById(R.id.date2)).setText(item.getDate2());
+        ((TextView) convertView.findViewById(R.id.date3)).setText(item.getDate3());
 
         return convertView;
     }

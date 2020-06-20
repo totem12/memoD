@@ -9,6 +9,10 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class CreatePage extends AppCompatActivity {
 
@@ -31,6 +35,7 @@ public class CreatePage extends AppCompatActivity {
         try {
             Cursor cs = db.rawQuery("select body, title from MEMO_TABLE where uuid = '"+ id +"'", null);
             boolean eol = cs.moveToFirst();
+
             while (eol) {
                 String Body = cs.getString(0);
                 body = findViewById(R.id.text_body);
@@ -59,6 +64,7 @@ public class CreatePage extends AppCompatActivity {
                     SQLiteDatabase db = helper.getWritableDatabase();
                     try {
                         db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + id + "'");
+                        db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '"+ id +"'");
                     } finally {
                         db.close();
                     }
@@ -77,9 +83,25 @@ public class CreatePage extends AppCompatActivity {
                 title = findViewById(R.id.editTitle);
                 String data_title = title.getText().toString();
 
+                String date2 = "";
+                String date3 = "";
+
+                 String date = getNowDate();
+
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try{
+                    Cursor cs = db.rawQuery("select date, date2 from DATE_TABLE where uuid = '"+ id +"'", null);
+                    boolean eol = cs.moveToFirst();
+
+                    while (eol) {
+                        date2 = cs.getString(0);
+                        date3 = cs.getString(1);
+
+                        eol = cs.moveToNext();
+                    }
+                    cs.close();
                     db.execSQL("update MEMO_TABLE set body = '"+ data_body +"', title = '"+ data_title+"' where uuid = '"+id+"'");
+                    db.execSQL("update DATE_TABLE set date = '"+ date +"', date2 = '"+ date2 +"', date3 = '"+ date3 +"' where uuid = '"+ id +"'");
                 } finally{
                     db.close();
                 }
@@ -87,6 +109,12 @@ public class CreatePage extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public static String getNowDate(){
+        final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        final Date date = new Date(System.currentTimeMillis());
+        return df.format(date);
     }
 
 }

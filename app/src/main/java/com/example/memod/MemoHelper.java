@@ -18,11 +18,18 @@ public class MemoHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "uuid TEXT, " +
                 "body TEXT," +
-                "title TEXT)");
+                "title TEXT)" );
+
+        db.execSQL("CREATE TABLE DATE_TABLE (" +
+                "uuid TEXT PRIMARY KEY , " +
+                "date TEXT," +
+                "date2 TEXT," +
+                "date3 TEXT)" );
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE IF EXISTS MEMO_TABLE");
+        db.execSQL("DROP TABLE IF EXISTS DATE_TABLE");
         onCreate(db);
     }
 }
