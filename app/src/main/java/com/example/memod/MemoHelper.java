@@ -21,7 +21,8 @@ public class MemoHelper extends SQLiteOpenHelper {
                 "title TEXT)" );
 
         db.execSQL("CREATE TABLE DATE_TABLE (" +
-                "uuid TEXT PRIMARY KEY , " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "uuid TEXT," +
                 "date TEXT," +
                 "date2 TEXT," +
                 "date3 TEXT)" );

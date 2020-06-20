@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
             Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE order by id", null);
-            Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE", null);
+            Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE ", null);
             final ArrayList<ListItem> data = new ArrayList<>();
             boolean first = cs.moveToFirst();
             boolean second = dcs.moveToFirst();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 data.add(item);
 
                 first = cs.moveToNext();
-                second = dcs.moveToFirst();
+                second = dcs.moveToNext();
             }
             adapter = new MyListAdapter(this, data,R.layout.list_item);
             listView = findViewById(R.id.List);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try{
                     db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
-                    db.execSQL("insert into DATE_TABLE(uuid, date) VALUES('"+ id +"', '"+ "')");
+                    db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
                 }finally {
                     db.close();
                 }

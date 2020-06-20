@@ -85,8 +85,7 @@ public class CreatePage extends AppCompatActivity {
 
                 String date2 = "";
                 String date3 = "";
-
-                 String date = getNowDate();
+                String date = getNowDate();
 
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try{
