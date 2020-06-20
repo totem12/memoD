@@ -39,17 +39,22 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE order by id", null);
-            Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE ", null);
+
+            Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE", null);
+            Cursor dcs;
+
             final ArrayList<ListItem> data = new ArrayList<>();
             boolean first = cs.moveToFirst();
-            boolean second = dcs.moveToFirst();
-            while (first && second) {
+
+            while (first) {
                 ListItem item = new ListItem();
 
                 item.setBody(cs.getString(0));
                 item.setTitle(cs.getString(1));
                 item.setUuid(cs.getString(2));
+
+                dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE where uuid = '"+ item.getUuid() +"'", null);
+                dcs.moveToFirst();
 
                 item.setDate(dcs.getString(0));
                 item.setDate2(dcs.getString(1));
@@ -58,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
                 data.add(item);
 
                 first = cs.moveToNext();
-                second = dcs.moveToNext();
+                dcs.close();
+
             }
             adapter = new MyListAdapter(this, data,R.layout.list_item);
             listView = findViewById(R.id.List);
             listView.setAdapter(adapter);
             cs.close();
-            dcs.close();
         } finally {
             db.close();
         }
