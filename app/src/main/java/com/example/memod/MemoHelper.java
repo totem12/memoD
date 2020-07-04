@@ -1,8 +1,8 @@
 package com.example.memod;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+        import android.content.Context;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.database.sqlite.SQLiteOpenHelper;
 
 public class MemoHelper extends SQLiteOpenHelper {
 

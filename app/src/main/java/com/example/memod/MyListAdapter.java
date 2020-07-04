@@ -51,7 +51,7 @@ public class MyListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public String getId(int position){return data.get(position).getUuid();}
+    public String getUuid(int position){return data.get(position).getUuid();}
 
     public void remove(int position) {
         data.remove(position);

@@ -37,6 +37,67 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         helper = new MemoHelper(MainActivity.this);
 
+        setAdapter();
+
+
+        //新規作成
+        findViewById(R.id.new_memo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                newMemo();
+            }
+        });
+
+        //削除
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String idStr = adapter.getUuid(position);
+
+                SQLiteDatabase db = helper.getWritableDatabase();
+                try {
+                    db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
+                    db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
+                } finally {
+                    db.close();
+                }
+
+                adapter.remove(position);
+                Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
+        //タッチしたメモにとぶ
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String Id = adapter.getUuid(position);
+                startIntent(Id);
+            }
+        });
+
+        super.onResume();
+    }
+
+
+    //新規作成
+    private void newMemo(){
+        id = UUID.randomUUID().toString();
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        try{
+            db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
+            db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
+        }finally {
+            db.close();
+        }
+
+        startIntent(id);
+    }
+
+    private void setAdapter(){
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
 
@@ -73,65 +134,12 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             db.close();
         }
-
-        //新規作成
-        findViewById(R.id.new_memo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = UUID.randomUUID().toString();
-                Intent intent = new Intent(MainActivity.this, CreatePage.class);
-                intent.putExtra("id", id);
-
-                SQLiteDatabase db = helper.getWritableDatabase();
-                try{
-                    db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
-                    db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
-                }finally {
-                    db.close();
-                }
-                startActivity(intent);
-            }
-        });
-
-        //削除
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String idStr = adapter.getId(position);
-
-                SQLiteDatabase db = helper.getWritableDatabase();
-                try {
-                    db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
-                    db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
-                } finally {
-                    db.close();
-                }
-
-                adapter.remove(position);
-                Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
-        });
-
-        //タッチしたメモにとぶ
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String Id = adapter.getId(position);
-
-                Intent intent = new Intent(MainActivity.this, CreatePage.class);
-                intent.putExtra("id", Id);
-                startActivity(intent);
-
-            }
-        });
-
-        super.onResume();
-
-
     }
 
+    private void startIntent(String id){
+        Intent intent = new Intent(MainActivity.this, CreatePage.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
 
 }
