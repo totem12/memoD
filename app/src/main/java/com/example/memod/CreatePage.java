@@ -20,7 +20,7 @@ public class CreatePage extends AppCompatActivity {
     private String id ="";
     private EditText body;
     private EditText title;
-    private boolean flag = false;
+    private boolean isBodyEmpty = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +53,14 @@ public class CreatePage extends AppCompatActivity {
         }
 
         if(body.length() == 0){
-            flag = true;
+            isBodyEmpty = true;
         }
 
         //戻る
         findViewById(R.id.return_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(flag){
+                if(isBodyEmpty){
                     SQLiteDatabase db = helper.getWritableDatabase();
                     try {
                         db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + id + "'");
