@@ -55,15 +55,15 @@ public class MemoHelper extends SQLiteOpenHelper {
         return item;
     }
 
-    public ArrayList<ListItem> getData(MemoHelper helper){
+    public ArrayList<ListItem> getData(){
         final ArrayList<ListItem> data = new ArrayList<>();
-        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE", null);
             boolean eol = cs.moveToFirst();
 
             while (eol) {
-                data.add(helper.getListItem(cs, db));
+                data.add(getListItem(cs, db));
                 eol = cs.moveToNext();
             }
             cs.close();

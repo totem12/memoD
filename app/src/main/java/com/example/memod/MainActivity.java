@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     //メモの一覧を表示
     private void setAdapter(){
-        final ArrayList<ListItem> data = helper.getData(helper);
+        final ArrayList<ListItem> data = helper.getData();
 
         adapter = new MyListAdapter(this, data,R.layout.list_item);
         listView = findViewById(R.id.List);
