@@ -61,13 +61,7 @@ public class CreatePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(isBodyEmpty){
-                    SQLiteDatabase db = helper.getWritableDatabase();
-                    try {
-                        db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + id + "'");
-                        db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '"+ id +"'");
-                    } finally {
-                        db.close();
-                    }
+                    helper.deleteData(id);
                 }
                 finish();
             }

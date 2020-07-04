@@ -106,13 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteMemo(int position){
         String idStr = adapter.getUuid(position);
 
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try {
-            db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
-            db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
-        } finally {
-            db.close();
-        }
+        helper.deleteData(idStr);
 
         adapter.remove(position);
         Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();

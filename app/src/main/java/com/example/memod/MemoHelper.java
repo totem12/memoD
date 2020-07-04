@@ -73,4 +73,14 @@ public class MemoHelper extends SQLiteOpenHelper {
 
         return data;
     }
+
+    public void deleteData(String idStr){
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
+            db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
+        } finally {
+            db.close();
+        }
+    }
 }
