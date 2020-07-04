@@ -1,11 +1,12 @@
 package com.example.memod;
 
-        import android.content.Context;
-        import android.database.Cursor;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.EditText;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class MemoHelper extends SQLiteOpenHelper {
 
@@ -37,21 +38,30 @@ public class MemoHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public ListItem getListItem(Cursor cs, SQLiteDatabase db){
+    public ListItem getListItem(String uuid){
         ListItem item = new ListItem();
 
-        item.setBody(cs.getString(0));
-        item.setTitle(cs.getString(1));
-        item.setUuid(cs.getString(2));
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.rawQuery("select body, title, uuid from MEMO_TABLE where uuid = '"+ uuid +"'", null);
+            c.moveToFirst();
 
-        Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE where uuid = '"+ item.getUuid() +"'", null);
-        dcs.moveToFirst();
+            item.setBody(c.getString(0));
+            item.setTitle(c.getString(1));
+            item.setUuid(uuid);
 
-        item.setDate(dcs.getString(0));
-        item.setDate2(dcs.getString(1));
-        item.setDate3(dcs.getString(2));
+            Cursor dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE where uuid = '"+ uuid +"'", null);
+            dcs.moveToFirst();
 
-        dcs.close();
+            item.setDate(dcs.getString(0));
+            item.setDate2(dcs.getString(1));
+            item.setDate3(dcs.getString(2));
+
+            dcs.close();
+            c.close();
+        } finally {
+            db.close();
+        }
         return item;
     }
 
@@ -59,11 +69,11 @@ public class MemoHelper extends SQLiteOpenHelper {
         final ArrayList<ListItem> data = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
         try {
-            Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE", null);
+            Cursor cs = db.rawQuery("select uuid, body from MEMO_TABLE ", null);
             boolean eol = cs.moveToFirst();
 
             while (eol) {
-                data.add(getListItem(cs, db));
+                data.add(getListItem(cs.getString(0)));
                 eol = cs.moveToNext();
             }
             cs.close();
@@ -87,7 +97,7 @@ public class MemoHelper extends SQLiteOpenHelper {
     public void createMemo(String id){
         SQLiteDatabase db = getWritableDatabase();
         try{
-            db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
+            db.execSQL("insert into MEMO_TABLE(uuid, body, title) VALUES('"+ id +"', '"+ "', '"+ "')");
             db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
         }finally {
             db.close();
@@ -116,4 +126,6 @@ public class MemoHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+
 }
