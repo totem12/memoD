@@ -88,42 +88,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAdapter(){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try {
+        final ArrayList<ListItem> data = helper.getData(helper);
 
-            Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE", null);
-            Cursor dcs;
-
-            final ArrayList<ListItem> data = new ArrayList<>();
-            boolean eol = cs.moveToFirst();
-
-            while (eol) {
-                ListItem item = new ListItem();
-
-                item.setBody(cs.getString(0));
-                item.setTitle(cs.getString(1));
-                item.setUuid(cs.getString(2));
-
-                dcs = db.rawQuery("select date, date2, date3 from DATE_TABLE where uuid = '"+ item.getUuid() +"'", null);
-                dcs.moveToFirst();
-
-                item.setDate(dcs.getString(0));
-                item.setDate2(dcs.getString(1));
-                item.setDate3(dcs.getString(2));
-
-                data.add(item);
-
-                eol = cs.moveToNext();
-                dcs.close();
-
-            }
-            adapter = new MyListAdapter(this, data,R.layout.list_item);
-            listView = findViewById(R.id.List);
-            listView.setAdapter(adapter);
-            cs.close();
-        } finally {
-            db.close();
-        }
+        adapter = new MyListAdapter(this, data,R.layout.list_item);
+        listView = findViewById(R.id.List);
+        listView.setAdapter(adapter);
     }
 
     private void startIntent(String id){
