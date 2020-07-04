@@ -60,12 +60,11 @@ public class MemoHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
             Cursor cs = db.rawQuery("select body, title, uuid from MEMO_TABLE", null);
-
             boolean eol = cs.moveToFirst();
+
             while (eol) {
                 data.add(helper.getListItem(cs, db));
                 eol = cs.moveToNext();
-
             }
             cs.close();
         } finally {

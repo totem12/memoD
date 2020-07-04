@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         startIntent(id);
     }
 
+    //メモの一覧を表示
     private void setAdapter(){
         final ArrayList<ListItem> data = helper.getData(helper);
 
