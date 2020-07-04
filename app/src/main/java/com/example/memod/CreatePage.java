@@ -37,13 +37,13 @@ public class CreatePage extends AppCompatActivity {
             boolean eol = cs.moveToFirst();
 
             while (eol) {
-                String Body = cs.getString(0);
+                String bodyField = cs.getString(0);
                 body = findViewById(R.id.text_body);
-                body.setText(Body);
+                body.setText(bodyField);
 
-                String Title = cs.getString(1);
+                String titleField = cs.getString(1);
                 title = findViewById(R.id.editTitle);
-                title.setText(Title);
+                title.setText(titleField);
 
                 eol = cs.moveToNext();
             }
