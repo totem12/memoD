@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
             Cursor dcs;
 
             final ArrayList<ListItem> data = new ArrayList<>();
-            boolean first = cs.moveToFirst();
+            boolean eol = cs.moveToFirst();
 
-            while (first) {
+            while (eol) {
                 ListItem item = new ListItem();
 
                 item.setBody(cs.getString(0));
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                 data.add(item);
 
-                first = cs.moveToNext();
+                eol = cs.moveToNext();
                 dcs.close();
 
             }
