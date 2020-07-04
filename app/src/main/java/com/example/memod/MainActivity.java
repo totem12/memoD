@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         setAdapter();
 
-
         //新規作成
         findViewById(R.id.new_memo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,14 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private void newMemo(){
         id = UUID.randomUUID().toString();
 
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try{
-            db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
-            db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
-        }finally {
-            db.close();
-        }
-
+        helper.createMemo(id);
         startIntent(id);
     }
 
@@ -106,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteMemo(int position){
         String idStr = adapter.getUuid(position);
 
-        helper.deleteData(idStr);
+        helper.deleteMemo(idStr);
 
         adapter.remove(position);
         Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();

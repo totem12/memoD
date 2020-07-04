@@ -74,12 +74,45 @@ public class MemoHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public void deleteData(String idStr){
+    public void deleteMemo(String idStr){
         SQLiteDatabase db = getWritableDatabase();
         try {
             db.execSQL("DELETE FROM MEMO_TABLE WHERE uuid = '" + idStr + "'");
             db.execSQL("DELETE FROM DATE_TABLE WHERE uuid = '" + idStr + "'");
         } finally {
+            db.close();
+        }
+    }
+
+    public void createMemo(String id){
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('"+ id +"', '"+ "')");
+            db.execSQL("insert into DATE_TABLE(uuid, date, date2) VALUES('"+ id +"', '"+ "', '"+ "')");
+        }finally {
+            db.close();
+        }
+    }
+
+    public void updateMemo(String data_body, String data_title, String id, String date){
+        String date2 = "";
+        String date3 = "";
+
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+            Cursor cs = db.rawQuery("select date, date2 from DATE_TABLE where uuid = '"+ id +"'", null);
+            boolean eol = cs.moveToFirst();
+
+            while (eol) {
+                date2 = cs.getString(0);
+                date3 = cs.getString(1);
+
+                eol = cs.moveToNext();
+            }
+            cs.close();
+            db.execSQL("update MEMO_TABLE set body = '"+ data_body +"', title = '"+ data_title+"' where uuid = '"+id+"'");
+            db.execSQL("update DATE_TABLE set date = '"+ date +"', date2 = '"+ date2 +"', date3 = '"+ date3 +"' where uuid = '"+ id +"'");
+        } finally{
             db.close();
         }
     }

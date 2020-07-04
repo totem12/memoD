@@ -61,7 +61,7 @@ public class CreatePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(isBodyEmpty){
-                    helper.deleteData(id);
+                    helper.deleteMemo(id);
                 }
                 finish();
             }
@@ -77,27 +77,9 @@ public class CreatePage extends AppCompatActivity {
                 title = findViewById(R.id.editTitle);
                 String data_title = title.getText().toString();
 
-                String date2 = "";
-                String date3 = "";
                 String date = getNowDate();
 
-                SQLiteDatabase db = helper.getWritableDatabase();
-                try{
-                    Cursor cs = db.rawQuery("select date, date2 from DATE_TABLE where uuid = '"+ id +"'", null);
-                    boolean eol = cs.moveToFirst();
-
-                    while (eol) {
-                        date2 = cs.getString(0);
-                        date3 = cs.getString(1);
-
-                        eol = cs.moveToNext();
-                    }
-                    cs.close();
-                    db.execSQL("update MEMO_TABLE set body = '"+ data_body +"', title = '"+ data_title+"' where uuid = '"+id+"'");
-                    db.execSQL("update DATE_TABLE set date = '"+ date +"', date2 = '"+ date2 +"', date3 = '"+ date3 +"' where uuid = '"+ id +"'");
-                } finally{
-                    db.close();
-                }
+                helper.updateMemo(data_body, data_title, id, date);
 
                 finish();
             }
