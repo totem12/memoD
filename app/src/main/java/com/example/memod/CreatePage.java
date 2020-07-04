@@ -31,26 +31,17 @@ public class CreatePage extends AppCompatActivity {
         Intent intent = this.getIntent();
         id = intent.getStringExtra("id");
 
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try {
-            Cursor cs = db.rawQuery("select body, title from MEMO_TABLE where uuid = '"+ id +"'", null);
-            boolean eol = cs.moveToFirst();
 
-            while (eol) {
-                String bodyField = cs.getString(0);
-                body = findViewById(R.id.text_body);
-                body.setText(bodyField);
 
-                String titleField = cs.getString(1);
-                title = findViewById(R.id.editTitle);
-                title.setText(titleField);
+        final ListItem listItem = helper.getListItem(id);
 
-                eol = cs.moveToNext();
-            }
-            cs.close();
-        } finally {
-            db.close();
-        }
+        String bodyField = listItem.getBody();
+        body = findViewById(R.id.text_body);
+        body.setText(bodyField);
+
+        String titleField = listItem.getTitle();
+        title = findViewById(R.id.editTitle);
+        title.setText(titleField);
 
         if(body.length() == 0){
             isBodyEmpty = true;
